@@ -12,9 +12,11 @@ class RoundState:
     """
     round_score: int
     dice_values: list[int]
+    has_scored: bool
     hot_dice: int
     busted: bool
     terminal: bool
+    
 
     @property
     def dice_remaining(self):
@@ -27,8 +29,20 @@ class GameState:
     Stores the state of a entire game
     """
     # Round number 0 indexed
-    round_number: int
-    current_round: RoundState
-    total_score: int
+    rounds: list[RoundState]
     game_over: bool
     mode: GameMode = GameMode.CLASSIC
+
+    @property
+    def round_number(self):
+        return len(self.rounds)
+    
+    @property
+    def current_round(self) -> RoundState | None:
+        return self.rounds[-1] if self.rounds else None
+    
+    @property
+    def total_score(self) -> int:
+        return sum(round.round_score for round in self.rounds)
+    
+ 
